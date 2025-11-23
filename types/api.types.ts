@@ -1,9 +1,3 @@
-// types/api.types.ts
-
-/* =========================================
- * 🔐 AUTH / USERS
- * =======================================*/
-
 export enum Role {
   ADMIN = "admin",
   USER = "user",
