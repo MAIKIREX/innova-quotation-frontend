@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { Product } from "@/types/api.types"
 import { ProductsTable } from "@/features/products/components/products-table"
@@ -13,18 +13,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/login")
-      return
-    }
-
-    if (token) {
-      fetchProducts()
-    }
-  }, [token, isAuthenticated, authLoading, router])
-
-  async function fetchProducts() {
+  const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true)
       const data = await api.getProducts(token!)
@@ -34,7 +23,18 @@ export default function ProductsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [token])
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login")
+      return
+    }
+
+    if (token) {
+      fetchProducts()
+    }
+  }, [token, isAuthenticated, authLoading, router, fetchProducts])
 
   const handleCreate = () => {
     router.push("/products/new")

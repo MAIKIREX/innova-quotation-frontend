@@ -59,8 +59,8 @@ export function QuotationsTable({ quotations, onCreate, onSelect }: QuotationsTa
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Proformas</h1>
-            <p className="text-sm text-muted-foreground">Gestiona y consulta tus proformas.</p>
+            <h1 className="text-2xl font-bold text-background">Proformas</h1>
+            <p className="text-sm text-muted-background">Gestiona y consulta tus proformas.</p>
           </div>
           <Button
             onClick={onCreate}
@@ -76,10 +76,10 @@ export function QuotationsTable({ quotations, onCreate, onSelect }: QuotationsTa
             placeholder="Buscar por cliente o número…"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+            className="flex-1 bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
           />
           <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as QuotationStatus | "all")}>
-            <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-700 text-foreground">
+            <SelectTrigger className="w-full sm:w-48 bg-slate-800 border-slate-700 text-background">
               <SelectValue placeholder="Filtrar por estado" />
             </SelectTrigger>
             <SelectContent className="bg-slate-800 border-slate-700">
@@ -115,10 +115,10 @@ export function QuotationsTable({ quotations, onCreate, onSelect }: QuotationsTa
                   onClick={() => onSelect(quotation.id)}
                   className="border-slate-700 cursor-pointer hover:bg-slate-800/50 transition-colors hover:border-l-4 hover:border-l-[#44C6D1]"
                 >
-                  <TableCell className="font-medium text-foreground">{quotation.number}</TableCell>
-                  <TableCell className="text-foreground">{quotation.customer.name}</TableCell>
-                  <TableCell className="text-muted-foreground hidden md:table-cell">{quotation.company.name}</TableCell>
-                  <TableCell className="text-muted-foreground hidden lg:table-cell">
+                  <TableCell className="font-medium text-background">{quotation.number}</TableCell>
+                  <TableCell className="text-white">{quotation.customer.name}</TableCell>
+                  <TableCell className="text-white/80 hidden md:table-cell">{quotation.company.name}</TableCell>
+                  <TableCell className="text-white/80 hidden lg:table-cell">
                     {formatDate(quotation.issueDate)}
                   </TableCell>
                   <TableCell>
@@ -137,7 +137,7 @@ export function QuotationsTable({ quotations, onCreate, onSelect }: QuotationsTa
               ))
             ) : (
               <TableRow className="border-slate-700">
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={6} className="text-center text-muted-background py-8">
                   No se encontraron proformas
                 </TableCell>
               </TableRow>
@@ -147,7 +147,7 @@ export function QuotationsTable({ quotations, onCreate, onSelect }: QuotationsTa
       </ScrollArea>
 
       {/* Results count */}
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-background">
         Mostrando {filteredQuotations.length} de {quotations.length} proforma
         {quotations.length !== 1 ? "s" : ""}
       </div>

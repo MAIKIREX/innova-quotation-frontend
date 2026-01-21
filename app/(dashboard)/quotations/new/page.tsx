@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { QuotationForm } from "@/features/quotations/components/quotation-form"
 import { useAuth } from "@/hooks/use-auth"
@@ -8,25 +8,14 @@ import { api } from "@/lib/api"
 import type { Company, CreateQuotationPayload, Customer } from "@/types/api.types"
 
 export default function NewQuotationPage() {
-  const { token, isAuthenticated, isLoading: authLoading } = useAuth()
+  const { token, user, isAuthenticated, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const [companies, setCompanies] = useState<Company[]>([])
   const [customers, setCustomers] = useState<Customer[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/login")
-      return
-    }
-
-    if (token) {
-      loadData()
-    }
-  }, [token, isAuthenticated, authLoading, router])
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true)
       const [companiesData, customersData] = await Promise.all([api.getCompanies(token!), api.getCustomers(token!)])
@@ -38,13 +27,26 @@ export default function NewQuotationPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [token])
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login")
+      return
+    }
+
+    if (token) {
+      loadData()
+    }
+  }, [token, isAuthenticated, authLoading, router, loadData])
 
   const handleSubmit = async (values: CreateQuotationPayload) => {
     try {
+      if (!token) throw new Error("Sesión no encontrada. Vuelve a iniciar sesión.")
       setIsLoading(true)
       setErrorMessage(null)
-      await api.createQuotation(values, token!)
+      const payload: CreateQuotationPayload = { ...values, userId: user?.id }
+      await api.createQuotation(payload, token)
       router.push("/quotations")
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error al crear proforma"

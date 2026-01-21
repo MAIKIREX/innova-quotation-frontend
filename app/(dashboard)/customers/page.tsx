@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CustomersTable } from "@/features/customers/components/customers-table"
 import { useAuth } from "@/hooks/use-auth"
@@ -13,18 +13,7 @@ export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/login")
-      return
-    }
-
-    if (token) {
-      fetchCustomers()
-    }
-  }, [token, isAuthenticated, authLoading, router])
-
-  async function fetchCustomers() {
+  const fetchCustomers = useCallback(async () => {
     try {
       setIsLoading(true)
       const data = await api.getCustomers(token!)
@@ -34,14 +23,25 @@ export default function CustomersPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [token])
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login")
+      return
+    }
+
+    if (token) {
+      fetchCustomers()
+    }
+  }, [token, isAuthenticated, authLoading, router, fetchCustomers])
 
   const handleCreate = () => {
     router.push("/customers/new")
   }
 
-  const handleSelect = () => {
-    // Could implement customer detail page later
+  const handleSelect = (customerId: string) => {
+    router.push(`/customers/${customerId}/edit`)
   }
 
   if (authLoading || isLoading) {

@@ -14,20 +14,39 @@ export default function QuotationsPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (authLoading) return
+
+    if (!isAuthenticated || !token) {
       router.push("/login")
       return
     }
 
-    if (token) {
-      fetchQuotations()
-    }
+    fetchQuotations(token)
   }, [token, isAuthenticated, authLoading, router])
 
-  async function fetchQuotations() {
+  useEffect(() => {
+    if (!token) return
+
+    const handleFocus = () => fetchQuotations(token)
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        fetchQuotations(token)
+      }
+    }
+
+    window.addEventListener("focus", handleFocus)
+    document.addEventListener("visibilitychange", handleVisibility)
+
+    return () => {
+      window.removeEventListener("focus", handleFocus)
+      document.removeEventListener("visibilitychange", handleVisibility)
+    }
+  }, [token])
+
+  async function fetchQuotations(activeToken: string) {
     try {
       setIsLoading(true)
-      const data = await api.getQuotations(token!)
+      const data = await api.getQuotations(activeToken)
       setQuotations(Array.isArray(data) ? data : data.items || [])
     } catch (err) {
       console.error("Error fetching quotations:", err)

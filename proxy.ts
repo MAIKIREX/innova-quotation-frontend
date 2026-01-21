@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-const PROTECTED_ROUTES = ["/quotations", "/customers", "/products", "/settings"]
+const PROTECTED_ROUTES = ["/quotations", "/customers", "/products", "/companies", "/settings"]
 const PUBLIC_ROUTES = ["/login", "/register"]
 
 export function proxy(request: NextRequest) {

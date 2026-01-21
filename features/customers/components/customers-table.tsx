@@ -40,8 +40,8 @@ export function CustomersTable({ customers, onCreate, onSelect }: CustomersTable
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Clientes</h1>
-            <p className="text-sm text-muted-foreground">Administra tus clientes.</p>
+            <h1 className="text-2xl font-bold text-background">Clientes</h1>
+            <p className="text-sm text-muted-background">Administra tus clientes.</p>
           </div>
           <Button
             onClick={onCreate}
@@ -57,7 +57,7 @@ export function CustomersTable({ customers, onCreate, onSelect }: CustomersTable
             placeholder="Buscar por nombre o NIT/CI…"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+            className="flex-1 bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
           />
         </div>
       </div>
@@ -83,21 +83,21 @@ export function CustomersTable({ customers, onCreate, onSelect }: CustomersTable
                   onClick={() => onSelect(customer.id)}
                   className="border-slate-700 cursor-pointer hover:bg-slate-800/50 transition-colors hover:border-l-4 hover:border-l-[#44C6D1]"
                 >
-                  <TableCell className="font-medium text-foreground">{customer.name}</TableCell>
-                  <TableCell className="text-muted-foreground">{customer.nitCi || "-"}</TableCell>
-                  <TableCell className="text-muted-foreground hidden md:table-cell">{customer.email || "-"}</TableCell>
-                  <TableCell className="text-muted-foreground hidden lg:table-cell">{customer.phone || "-"}</TableCell>
-                  <TableCell className="text-muted-foreground hidden lg:table-cell">
+                  <TableCell className="font-medium text-background">{customer.name}</TableCell>
+                  <TableCell className="text-muted-background">{customer.nitCi || "-"}</TableCell>
+                  <TableCell className="text-muted-background hidden md:table-cell">{customer.email || "-"}</TableCell>
+                  <TableCell className="text-muted-background hidden lg:table-cell">{customer.phone || "-"}</TableCell>
+                  <TableCell className="text-muted-background hidden lg:table-cell">
                     {customer.address || "-"}
                   </TableCell>
-                  <TableCell className="text-muted-foreground hidden xl:table-cell">
+                  <TableCell className="text-muted-background hidden xl:table-cell">
                     {formatDate(customer.updatedAt)}
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow className="border-slate-700">
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={6} className="text-center text-muted-background py-8">
                   No se encontraron clientes
                 </TableCell>
               </TableRow>
@@ -107,7 +107,7 @@ export function CustomersTable({ customers, onCreate, onSelect }: CustomersTable
       </ScrollArea>
 
       {/* Results count */}
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-background">
         Mostrando {filteredCustomers.length} de {customers.length} cliente{customers.length !== 1 ? "s" : ""}
       </div>
     </div>

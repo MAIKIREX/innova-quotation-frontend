@@ -80,7 +80,7 @@ export function SendQuotationEmailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-slate-900 border-slate-700">
         <DialogHeader>
-          <DialogTitle className="text-foreground">Enviar proforma por correo</DialogTitle>
+          <DialogTitle className="text-background">Enviar proforma por correo</DialogTitle>
           <DialogDescription>Completa los detalles del correo para enviar la proforma.</DialogDescription>
         </DialogHeader>
 
@@ -98,12 +98,12 @@ export function SendQuotationEmailDialog({
               name="toEmail"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Email destino *</FormLabel>
+                  <FormLabel className="text-background">Email destino *</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="cliente@example.com"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       {...field}
                     />
                   </FormControl>
@@ -118,11 +118,11 @@ export function SendQuotationEmailDialog({
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Asunto *</FormLabel>
+                  <FormLabel className="text-background">Asunto *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: Proforma N° 001"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       {...field}
                     />
                   </FormControl>
@@ -137,11 +137,11 @@ export function SendQuotationEmailDialog({
               name="body"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Mensaje (opcional)</FormLabel>
+                  <FormLabel className="text-background">Mensaje (opcional)</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Mensaje adicional para incluir en el correo"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       rows={4}
                       {...field}
                     />
@@ -156,7 +156,7 @@ export function SendQuotationEmailDialog({
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                className="border-slate-700 text-foreground hover:bg-slate-800"
+                className="border-slate-700 text-background hover:bg-slate-800"
               >
                 Cancelar
               </Button>

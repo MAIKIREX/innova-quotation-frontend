@@ -1,72 +1,52 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import type { AuthUser } from "@/types/api.types"
-import { api } from "@/lib/api"
-
-const STORAGE_KEY = "auth_token"
-const USER_STORAGE_KEY = "auth_user"
+import { useAuthStore } from "@/lib/auth-store"
 
 export function useAuth() {
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [token, setToken] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
+  const { user, token, isAuthenticated, login, register, logout, isLoading } = useAuthStore()
+  const [hasHydrated, setHasHydrated] = useState(false)
 
-  // Initialize from localStorage
   useEffect(() => {
-    const savedToken = localStorage.getItem(STORAGE_KEY)
-    const savedUser = localStorage.getItem(USER_STORAGE_KEY)
+    const markHydrated = () => setHasHydrated(true)
+    const unsubscribeHydrate = useAuthStore.persist?.onHydrate?.(() => setHasHydrated(false))
+    const unsubscribeFinishHydration = useAuthStore.persist?.onFinishHydration?.(markHydrated)
 
-    if (savedToken && savedUser) {
-      setToken(savedToken)
-      setUser(JSON.parse(savedUser))
+    if (useAuthStore.persist?.hasHydrated?.()) {
+      queueMicrotask(markHydrated)
     }
-    setIsLoading(false)
+
+    return () => {
+      unsubscribeHydrate?.()
+      unsubscribeFinishHydration?.()
+    }
   }, [])
 
-  const login = useCallback(
-    async (email: string, password: string) => {
-      setIsLoading(true)
-      try {
-        const { user: newUser, access_token } = await api.login(email, password)
-        setUser(newUser)
-        setToken(access_token)
-        localStorage.setItem(STORAGE_KEY, access_token)
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser))
-        router.push("/quotations")
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [router],
-  )
+  const handleLogin = async (email: string, password: string) => {
+    await login(email, password)
+    router.push("/dashboard")
+  }
 
-  const register = useCallback(
-    async (email: string, password: string, name: string, lastname: string) => {
-      setIsLoading(true)
-      try {
-        const { user: newUser, access_token } = await api.register(email, password, name, lastname)
-        setUser(newUser)
-        setToken(access_token)
-        localStorage.setItem(STORAGE_KEY, access_token)
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser))
-        router.push("/quotations")
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [router],
-  )
+  const handleRegister = async (email: string, password: string, name: string, lastname: string) => {
+    await register(email, password, name, lastname)
+    router.push("/dashboard")
+  }
 
-  const logout = useCallback(() => {
-    setUser(null)
-    setToken(null)
-    localStorage.removeItem(STORAGE_KEY)
-    localStorage.removeItem(USER_STORAGE_KEY)
+  const handleLogout = () => {
+    logout()
     router.push("/login")
-  }, [router])
+  }
 
-  return { user, token, isLoading, login, register, logout, isAuthenticated: !!token }
+  return {
+    user,
+    token,
+    // Keep loading and avoid redirects until zustand has finished rehydrating from storage
+    isLoading: isLoading || !hasHydrated,
+    isAuthenticated: hasHydrated && (!!token || isAuthenticated),
+    login: handleLogin,
+    register: handleRegister,
+    logout: handleLogout,
+  }
 }

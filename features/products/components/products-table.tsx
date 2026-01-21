@@ -42,8 +42,8 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Productos</h1>
-            <p className="text-sm text-muted-foreground">Administra tus productos y servicios.</p>
+            <h1 className="text-2xl font-bold text-background">Productos</h1>
+            <p className="text-sm text-muted-background">Administra tus productos y servicios.</p>
           </div>
           <Button
             onClick={onCreate}
@@ -58,7 +58,7 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
           placeholder="Buscar por nombre o descripción…"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+          className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
         />
       </div>
 
@@ -80,12 +80,12 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <TableRow key={product.id} className="border-slate-700 hover:bg-slate-800/50 transition-colors">
-                  <TableCell className="font-medium text-foreground">{product.name}</TableCell>
-                  <TableCell className="text-muted-foreground hidden sm:table-cell">{product.unit}</TableCell>
-                  <TableCell className="text-muted-foreground hidden md:table-cell">
+                  <TableCell className="font-medium text-background">{product.name}</TableCell>
+                  <TableCell className="text-muted-background hidden sm:table-cell">{product.unit}</TableCell>
+                  <TableCell className="text-muted-background hidden md:table-cell">
                     {product.costReference ? `${product.costReference}` : "-"}
                   </TableCell>
-                  <TableCell className="text-muted-foreground hidden lg:table-cell">
+                  <TableCell className="text-muted-background hidden lg:table-cell">
                     {product.priceReference ? `${product.priceReference}` : "-"}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
@@ -93,7 +93,7 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
                       {product.active ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-muted-foreground hidden xl:table-cell">
+                  <TableCell className="text-muted-background hidden xl:table-cell">
                     {formatDate(product.updatedAt)}
                   </TableCell>
                   <TableCell className="text-right">
@@ -110,7 +110,7 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
               ))
             ) : (
               <TableRow className="border-slate-700">
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={7} className="text-center text-muted-background py-8">
                   No se encontraron productos
                 </TableCell>
               </TableRow>
@@ -120,7 +120,7 @@ export function ProductsTable({ products, onCreate, onEdit }: ProductsTableProps
       </ScrollArea>
 
       {/* Results count */}
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-background">
         Mostrando {filteredProducts.length} de {products.length} producto
         {products.length !== 1 ? "s" : ""}
       </div>

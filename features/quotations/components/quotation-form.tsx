@@ -1,5 +1,5 @@
 "use client"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useFieldArray, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Plus, Trash2 } from "lucide-react"
@@ -91,7 +91,7 @@ export function QuotationForm({
   })
 
   // Calculate summary from items
-  const items = form.watch("items")
+  const items = useWatch({ control: form.control, name: "items" }) ?? []
   const summary = items.reduce(
     (acc, item) => {
       const quantity = Number(item.quantity) || 0
@@ -111,7 +111,17 @@ export function QuotationForm({
   )
 
   const handleSubmit = async (values: FormValues) => {
-    const itemsWithCalculations = values.items.map((item) => {
+    const normalizedValues: FormValues = {
+      ...values,
+      number: values.number || undefined,
+      dueDate: values.dueDate || undefined,
+      notes: values.notes || undefined,
+      warranty: values.warranty || undefined,
+      paymentTerms: values.paymentTerms || undefined,
+      deliveryPlace: values.deliveryPlace || undefined,
+    }
+
+    const itemsWithCalculations = normalizedValues.items.map((item) => {
       const quantity = Number(item.quantity) || 0
       const costUnit = Number(item.costUnit) || 0
       const marginPercent = Number(item.marginPercent) || 0
@@ -134,7 +144,7 @@ export function QuotationForm({
     })
 
     const payload: CreateQuotationPayload = {
-      ...values,
+      ...normalizedValues,
       items: itemsWithCalculations,
       subtotalAmount: summary.subtotal,
       totalAmount: summary.subtotal,
@@ -278,7 +288,11 @@ export function QuotationForm({
                     <FormItem>
                       <FormLabel className="text-white">Fecha de emisión</FormLabel>
                       <FormControl>
-                        <Input {...field} type="date" className="border-[#44C6D1]/30 bg-[#111827]/50 text-white" />
+                        <Input
+                          {...field}
+                          type="date"
+                          className="border-[#44C6D1]/30 bg-[#111827]/50 text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-80"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -292,7 +306,11 @@ export function QuotationForm({
                     <FormItem>
                       <FormLabel className="text-white">Fecha de vencimiento</FormLabel>
                       <FormControl>
-                        <Input {...field} type="date" className="border-[#44C6D1]/30 bg-[#111827]/50 text-white" />
+                        <Input
+                          {...field}
+                          type="date"
+                          className="border-[#44C6D1]/30 bg-[#111827]/50 text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-80"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -510,7 +528,7 @@ export function QuotationForm({
                       onClick={() => remove(index)}
                       variant="ghost"
                       size="sm"
-                      className="text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                      className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer"
                       disabled={fields.length === 1}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
@@ -532,7 +550,7 @@ export function QuotationForm({
                   })
                 }
                 variant="outline"
-                className="w-full border-[#44C6D1]/50 text-[#44C6D1] hover:bg-[#44C6D1]/10"
+                className="w-full bg-[#44C6D1] border-[#44C6D1]/50 text-[#111827] hover:bg-[#44C6D1]/10 cursor-pointer hover:text-white"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Agregar ítem
@@ -566,8 +584,9 @@ export function QuotationForm({
           <div className="flex gap-3">
             <Button
               type="submit"
+              variant="outline"
               disabled={isLoading}
-              className="flex-1 bg-[#44C6D1] text-[#111827] hover:bg-[#44C6D1]/90"
+              className="flex-1 bg-[#44C6D1] text-[#111827] hover:bg-[#44C6D1]/10 cursor-pointer hover:text-white border-[#44C6D1]/50" 
             >
               {isLoading ? "Guardando..." : "Guardar proforma"}
             </Button>
@@ -575,7 +594,7 @@ export function QuotationForm({
               type="button"
               variant="outline"
               onClick={() => form.reset()}
-              className="border-[#44C6D1]/30 text-[#44C6D1] hover:bg-[#44C6D1]/10"
+              className="border-[#44C6D1]/30 text-white/80 hover:bg-[#44C6D1]/10 hover:text-white cursor-pointer bg-[#f28f3b]"
             >
               Limpiar
             </Button>

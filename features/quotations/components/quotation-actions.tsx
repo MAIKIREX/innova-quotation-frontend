@@ -8,16 +8,20 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { SendQuotationEmailDialog } from "./send-quotation-email-dialog"
-import { Download, FileText, Mail } from "lucide-react"
+import { Download, Eye, FileText, Mail } from "lucide-react"
 
 export type QuotationActionsProps = {
   quotation: Quotation
   onDownloadPdf: () => void
+  onViewPdf: () => void
   onGeneratePdf: () => void
   onSendEmail: (payload: SendQuotationEmailPayload) => Promise<void> | void
+  onMarkAccepted: () => void
   isDownloadingPdf?: boolean
+  isViewingPdf?: boolean
   isGeneratingPdf?: boolean
   isSendingEmail?: boolean
+  isUpdatingStatus?: boolean
   lastPdf?: QuotationPdf | null
   lastEmail?: QuotationEmail | null
   errorMessage?: string | null
@@ -35,11 +39,15 @@ const formatDate = (dateString: string): string => {
 export function QuotationActions({
   quotation,
   onDownloadPdf,
+  onViewPdf,
   onGeneratePdf,
   onSendEmail,
+  onMarkAccepted,
   isDownloadingPdf = false,
+  isViewingPdf = false,
   isGeneratingPdf = false,
   isSendingEmail = false,
+  isUpdatingStatus = false,
   lastPdf,
   lastEmail,
   errorMessage,
@@ -50,11 +58,11 @@ export function QuotationActions({
     <>
       <Card className="bg-slate-900 border-slate-700">
         <CardHeader>
-          <CardTitle className="text-foreground flex items-center gap-2">
+          <CardTitle className="text-background flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#44C6D1]" />
             Acciones de la proforma
           </CardTitle>
-          <CardDescription>Descarga, genera y envía esta proforma.</CardDescription>
+          <CardDescription className="text-background">Descarga, genera y envía esta proforma.</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -67,21 +75,21 @@ export function QuotationActions({
           {/* Quotation Summary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-800 rounded-lg border border-slate-700">
             <div>
-              <p className="text-sm text-muted-foreground">Número</p>
-              <p className="text-lg font-semibold text-foreground">{quotation.number}</p>
+              <p className="text-sm text-background">Número</p>
+              <p className="text-lg font-semibold text-background">{quotation.number}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Cliente</p>
-              <p className="text-lg font-semibold text-foreground">{quotation.customer.name}</p>
+              <p className="text-sm text-background">Cliente</p>
+              <p className="text-lg font-semibold text-background">{quotation.customer.name}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total</p>
+              <p className="text-sm text-background">Total</p>
               <p className="text-lg font-semibold text-[#44C6D1]">
                 {quotation.totalAmount} {quotation.currency}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Estado</p>
+              <p className="text-sm text-background">Estado</p>
               <Badge className="bg-blue-900 text-blue-100 border border-blue-700 mt-1">{quotation.status}</Badge>
             </div>
           </div>
@@ -98,6 +106,16 @@ export function QuotationActions({
             >
               <Download className="w-4 h-4 mr-2" />
               {isDownloadingPdf ? "Descargando..." : "Descargar PDF"}
+            </Button>
+
+            <Button
+              onClick={onViewPdf}
+              disabled={isViewingPdf}
+              variant="outline"
+              className="border-[#1A587F] text-[#1A587F] hover:bg-slate-800 bg-transparent"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              {isViewingPdf ? "Abriendo..." : "Ver PDF"}
             </Button>
 
             <Button
@@ -119,14 +137,24 @@ export function QuotationActions({
             </Button>
           </div>
 
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={onMarkAccepted}
+              disabled={isUpdatingStatus || quotation.status === "accepted"}
+              className="bg-green-700 hover:bg-green-800 text-white font-semibold"
+            >
+              {isUpdatingStatus ? "Actualizando..." : "Marcar como aceptada"}
+            </Button>
+          </div>
+
           <Separator className="bg-slate-700" />
 
           {/* Last PDF Info */}
           {lastPdf && (
             <div className="p-3 bg-slate-800 rounded-lg border border-slate-700">
-              <p className="text-sm font-semibold text-foreground mb-2">📄 Último PDF generado</p>
-              <p className="text-xs text-muted-foreground">{lastPdf.filePath}</p>
-              <p className="text-xs text-muted-foreground mt-1">Generado: {formatDate(lastPdf.createdAt)}</p>
+              <p className="text-sm font-semibold text-background mb-2">📄 Último PDF generado</p>
+              <p className="text-xs text-muted-background">{lastPdf.filePath}</p>
+              <p className="text-xs text-muted-background mt-1">Generado: {formatDate(lastPdf.createdAt)}</p>
             </div>
           )}
 

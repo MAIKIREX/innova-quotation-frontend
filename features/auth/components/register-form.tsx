@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -60,12 +61,14 @@ export function RegisterForm({ onSubmit, isLoading = false, errorMessage = null 
       {/* Logo Placeholder */}
       <div className="flex justify-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#44C6D1] text-2xl font-bold text-[#020617]">
-          <img
+          <Image
             src="/images/logo.svg"
             alt="Logo"
+            width={40}
+            height={40}
             className="h-10 w-10 object-contain"
-            onError={(e) => {
-              ;(e.target as HTMLImageElement).style.display = "none"
+            onError={(event) => {
+              event.currentTarget.style.display = "none"
             }}
           />
         </div>

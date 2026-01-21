@@ -59,8 +59,8 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
   return (
     <Card className="bg-slate-900 border-slate-700">
       <CardHeader>
-        <CardTitle className="text-foreground">Datos del producto</CardTitle>
-        <CardDescription>Completa la información básica del producto o servicio.</CardDescription>
+        <CardTitle className="text-background">Datos del producto</CardTitle>
+        <CardDescription className="text-white/80">Completa la información básica del producto o servicio.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -77,11 +77,11 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Nombre *</FormLabel>
+                  <FormLabel className="text-background">Nombre *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: Servicio de consultoría"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       {...field}
                     />
                   </FormControl>
@@ -96,11 +96,11 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Descripción</FormLabel>
+                  <FormLabel className="text-background">Descripción</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Descripción detallada del producto o servicio"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       rows={3}
                       {...field}
                     />
@@ -116,11 +116,11 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
               name="unit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Unidad</FormLabel>
+                  <FormLabel className="text-background">Unidad</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: unidad, m, h, kg"
-                      className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                      className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                       {...field}
                     />
                   </FormControl>
@@ -136,13 +136,13 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
                 name="costReference"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground">Costo ref.</FormLabel>
+                    <FormLabel className="text-background">Costo ref.</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0.00"
                         step="0.01"
-                        className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                        className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                         {...field}
                       />
                     </FormControl>
@@ -156,13 +156,13 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
                 name="priceReference"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground">Precio ref.</FormLabel>
+                    <FormLabel className="text-background">Precio ref.</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0.00"
                         step="0.01"
-                        className="bg-slate-800 border-slate-700 text-foreground placeholder:text-slate-500"
+                        className="bg-slate-800 border-slate-700 text-background placeholder:text-slate-500"
                         {...field}
                       />
                     </FormControl>
@@ -179,8 +179,8 @@ export function ProductForm({ initialValues, onSubmit, isLoading = false, errorM
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border border-slate-700 p-3 bg-slate-800">
                   <div>
-                    <FormLabel className="text-foreground">Estado</FormLabel>
-                    <p className="text-sm text-muted-foreground">Marcar como activo/inactivo</p>
+                    <FormLabel className="text-background">Estado</FormLabel>
+                    <p className="text-sm text-white/80">Marcar como activo/inactivo</p>
                   </div>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
